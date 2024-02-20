@@ -1,6 +1,6 @@
 // ==UserScript==
-// @name      Auto-login
-// @version   1.1
+// @name      Utils
+// @version   1.2
 // @updateURL https://raw.githubusercontent.com/floriensk/userscripts/main/src/utils.user.js
 // ==/UserScript==
 
@@ -94,7 +94,7 @@ async function waitForElementInDom(selector, parent = document.body, subtree = t
       return element;
 
   // using MutationObserver instead of DOMNodeInserted because the latter is deprecated
-  return new Promise((resolve, _) => {
+  return new Promise(resolve => {
     const observer = new MutationObserver((_, observer) => {
     const element = document.querySelector(selector);
     if (element != null) {
