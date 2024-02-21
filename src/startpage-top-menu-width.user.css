@@ -1,0 +1,13 @@
+/*
+==UserCSS==
+@name      Startpage: top menu width enhancement
+@version   1.0
+@updateURL https://raw.githubusercontent.com/floriensk/userscripts/main/startpage-top-menu-width.user.css
+@match     https://*.startpage.com/*
+@match     https://startpage.com/*
+==/UserCSS==
+*/
+
+.inline-nav {
+    max-width: 100%;
+}

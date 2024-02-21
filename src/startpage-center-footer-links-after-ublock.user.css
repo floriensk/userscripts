@@ -1,0 +1,14 @@
+/*
+==UserCSS==
+@name         Startpage: center footer links after removed divs
+@description  Use this along with blocking some divs in the footer with uBlock Origin
+@version      1.0
+@updateURL    https://raw.githubusercontent.com/floriensk/userscripts/main/startpage-center-footer-links-after-ublock.user.css
+@match        https://*.startpage.com/*
+@match        https://startpage.com/*
+==/UserCSS==
+*/
+
+.footer__container {
+    display: inherit;
+}

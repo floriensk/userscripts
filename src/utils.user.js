@@ -1,13 +1,13 @@
 // ==UserScript==
 // @name      Utils
-// @version   1.2
+// @version   1.3
 // @updateURL https://raw.githubusercontent.com/floriensk/userscripts/main/src/utils.user.js
 // ==/UserScript==
 
 const getElement = (spec) =>
-  typeof spec === "string" ? document.querySelector(spec) : spec;
+    typeof spec === "string" ? document.querySelector(spec) : spec;
 const getElements = (spec) =>
-  typeof spec === "string" ? [...document.querySelectorAll(spec)] : spec;
+    typeof spec === "string" ? [...document.querySelectorAll(spec)] : spec;
 
 const performClick = (element) => { element.click(); };
 
@@ -23,61 +23,61 @@ const performClick = (element) => { element.click(); };
  *     from inputSpec. If undefined, all need to be matched.
  */
 async function initiateLogin(
-  inputSpec = "form input[id], form input[type='password'], form input[type='email']",
-  submitSpec = "form button[type='submit'], form input[type='submit']",
-  tryInferManualInput = true,
-  minimalRequiredInputMatches = undefined
+    inputSpec = "form input[id], form input[type='password'], form input[type='email']",
+    submitSpec = "form button[type='submit'], form input[type='submit']",
+    tryInferManualInput = true,
+    minimalRequiredInputMatches = undefined
 ) {
-  // Find inputs and submit
-  const inputs = Array.isArray(inputSpec)
+    // Find inputs and submit
+    const inputs = Array.isArray(inputSpec)
         ? inputSpec.map(spec => getElement(spec))
         : getElements(inputSpec);
 
-  if (minimalRequiredInputMatches <= 0)
-    throw new Error("minimalRequiredInputMatches cannot be zero or negative");
+    if (minimalRequiredInputMatches <= 0)
+        throw new Error("minimalRequiredInputMatches cannot be zero or negative");
 
-  if (minimalRequiredInputMatches == null
-      ? inputs.some(i => i == null)
-      : inputs.filter(i => i != null).length < minimalRequiredInputMatches
-     ) {
-    console.log("Userscript Auto-login: inputs not found");
-    throw new Error("Userscript Auto-login: inputs not found");
-  }
-
-  const submit = getElement(submitSpec);
-  if (submit == null) {
-    console.log("Userscript Auto-login: submit not found");
-    throw new Error("Userscript Auto-login: submit not found");
-  }
-
-  // Subscribe to input changes
-  async function subscribeToInput(input) {
-    // check if input is already filled
-    if (input.value.length > 0) {
-      if (tryInferManualInput || input.value.length > 1)
-        return Promise.resolve(input.value);
-      else
-        return Promise.reject(new Error("Userscript Auto-login: manual input detected"));
+    if (minimalRequiredInputMatches == null
+        ? inputs.some(i => i == null)
+        : inputs.filter(i => i != null).length < minimalRequiredInputMatches
+    ) {
+        console.log("Userscript Utils: inputs not found");
+        throw new Error("Userscript Utils: inputs not found");
     }
 
-    return new Promise((resolve, reject) => {
-      function handleInput(event) {
-        event.target.removeEventListener("input", handleInput);
+    const submit = getElement(submitSpec);
+    if (submit == null) {
+        console.log("Userscript Utils: submit not found");
+        throw new Error("Userscript Utils: submit not found");
+    }
 
-        if (tryInferManualInput && event.target.value.length === 1)
-          reject(new Error("Userscript Auto-login: manual input detected"));
-        else
-          resolve(event.target.value); // resolve promise with the current value
-      }
+    // Subscribe to input changes
+    async function subscribeToInput(input) {
+        // check if input is already filled
+        if (input.value.length > 0) {
+            if (tryInferManualInput || input.value.length > 1)
+                return Promise.resolve(input.value);
+            else
+                return Promise.reject(new Error("Userscript Utils: manual input detected"));
+        }
 
-      input.addEventListener("input", handleInput); // subscribe to the input event
-    });
-  }
+        return new Promise((resolve, reject) => {
+            function handleInput(event) {
+                event.target.removeEventListener("input", handleInput);
 
-  const inputPromises = inputs.map(input => subscribeToInput(input));
+                if (tryInferManualInput && event.target.value.length === 1)
+                    reject(new Error("Userscript Utils: manual input detected"));
+                else
+                    resolve(event.target.value); // resolve promise with the current value
+            }
 
-  return Promise.all(inputPromises).then(
-    () => performClick(submit));
+            input.addEventListener("input", handleInput); // subscribe to the input event
+        });
+    }
+
+    const inputPromises = inputs.map(input => subscribeToInput(input));
+
+    return Promise.all(inputPromises).then(
+        () => performClick(submit));
 }
 
 /**
@@ -88,20 +88,20 @@ async function initiateLogin(
  * @param {bool} subtree: whether to look in the whole subtree instead of only the children.
  */
 async function waitForElementInDom(selector, parent = document.body, subtree = true) {
-  // check if element is already in the DOM
-  const element = document.querySelector(selector);
-  if (element != null)
-      return element;
-
-  // using MutationObserver instead of DOMNodeInserted because the latter is deprecated
-  return new Promise(resolve => {
-    const observer = new MutationObserver((_, observer) => {
+    // check if element is already in the DOM
     const element = document.querySelector(selector);
-    if (element != null) {
-      observer.disconnect();
-      resolve(element);
-    }
+    if (element != null)
+        return element;
+
+    // using MutationObserver instead of DOMNodeInserted because the latter is deprecated
+    return new Promise(resolve => {
+        const observer = new MutationObserver((_, observer) => {
+            const element = document.querySelector(selector);
+            if (element != null) {
+                observer.disconnect();
+                resolve(element);
+            }
+        });
+        observer.observe(parent, { childList: true, subtree });
     });
-    observer.observe(parent, { childList: true, subtree });
-  });
 }
