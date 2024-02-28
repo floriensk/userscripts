@@ -1,0 +1,12 @@
+/*
+==UserCSS==
+@name      HVG: restore scrolling after uBlock
+@version   1.0
+@updateURL https://raw.githubusercontent.com/floriensk/userscripts/main/src/hvg-restore-scrolling.user.css
+@match     *://hvg.hu/*
+==/UserCSS==
+*/
+
+body {
+    overflow: unset;
+}
