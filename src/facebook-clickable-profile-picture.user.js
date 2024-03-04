@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Facebook: clickable profile picture
-// @version   1.0
+// @version   1.1
 // @updateURL https://raw.githubusercontent.com/floriensk/userscripts/main/src/facebook-clickable-profile-picture.user.js
 // @match     https://www.facebook.com/*
 // @require   Utils
