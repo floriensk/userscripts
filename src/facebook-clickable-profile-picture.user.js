@@ -3,7 +3,6 @@
 // @version   1.0
 // @updateURL https://raw.githubusercontent.com/floriensk/userscripts/main/src/facebook-clickable-profile-picture.user.js
 // @match     https://www.facebook.com/*
-// @run-at    document-start
 // @require   Utils
 // ==/UserScript==
 
