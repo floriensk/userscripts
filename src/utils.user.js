@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Utils
-// @version   1.4
+// @version   1.5
 // @updateURL https://raw.githubusercontent.com/floriensk/userscripts/main/src/utils.user.js
 // ==/UserScript==
 
@@ -87,9 +87,15 @@ async function initiateLogin(
  * @param {HTMLElement} parent: the DOM element to check the descendants of.
  * @param {bool} subtree: whether to look in the whole subtree instead of only the children.
  */
-async function waitForElementInDom(selector, parent = undefined, subtree = true) {
+async function waitForElementInDom(
+    selector,
+    parent = undefined,
+    subtree = true,
+    matchRelativeToParent = false,
+    disconnectOnMatch = true
+) {
     parent = parent ?? (document.body ?? document.documentElement);
-    
+
     // check if element is already in the DOM
     const element = document.querySelector(selector);
     if (element != null)
@@ -98,9 +104,11 @@ async function waitForElementInDom(selector, parent = undefined, subtree = true)
     // using MutationObserver instead of DOMNodeInserted because the latter is deprecated
     return new Promise(resolve => {
         const observer = new MutationObserver((_, observer) => {
-            const element = document.querySelector(selector);
+            const element = (matchRelativeToParent ? parent : document).querySelector(selector);
             if (element != null) {
-                observer.disconnect();
+                if (disconnectOnMatch)
+                    observer.disconnect();
+
                 resolve(element);
             }
         });
