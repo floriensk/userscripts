@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Facebook: clickable profile picture
-// @version   1.1
+// @version   1.2
 // @updateURL https://raw.githubusercontent.com/floriensk/userscripts/main/src/facebook-clickable-profile-picture.user.js
 // @match     https://www.facebook.com/*
 // @require   Utils
@@ -33,4 +33,9 @@ function waitForProfilePicture() {
         });
 }
 
-waitForProfilePicture();
+if (
+    window.location.pathname === "/profile.php" || // check if it's a profile page, based on the URL
+    document.querySelector("div[role='main'] a[role='tab'][href$='/friends']") // check if it's a profile page, based on the existence of the Friends tab
+) {
+    waitForProfilePicture();
+}
