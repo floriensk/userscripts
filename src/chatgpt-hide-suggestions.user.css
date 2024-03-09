@@ -1,0 +1,21 @@
+/*
+==UserCSS==
+@name        ChatGPT: hide suggestions
+@description Hides the suggested prompts section in ChatGPT
+@version     1.0
+@updateURL   https://raw.githubusercontent.com/floriensk/userscripts/main/src/chatgpt-hide-suggestions.user.css
+@match       https://chat.openai.com/*
+==/UserCSS==
+*/
+
+main form > div > div {
+    display: none;
+}
+
+form + div {
+    display: none;
+}
+
+form {
+    margin-bottom: 10px;
+}
