@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Utils
-// @version   1.5
+// @version   1.6
 // @updateURL https://raw.githubusercontent.com/floriensk/userscripts/main/src/utils.user.js
 // ==/UserScript==
 
@@ -84,17 +84,20 @@ async function initiateLogin(
  * Waits for an element matching the specified selector to appear in the DOM.
  *
  * @param {string} selector: the query selector that matches the element.
- * @param {HTMLElement} parent: the DOM element to check the descendants of.
+ * @param {HTMLElement} _parent: the DOM element to check the descendants of.
  * @param {bool} subtree: whether to look in the whole subtree instead of only the children.
  */
 async function waitForElementInDom(
     selector,
-    parent = undefined,
-    subtree = true,
-    matchRelativeToParent = false,
-    disconnectOnMatch = true
+    options = { parent: undefined, subtree: true, matchRelativeToParent: false, disconnectOnMatch: true }
 ) {
-    parent = parent ?? (document.body ?? document.documentElement);
+    const { parent, subtree, matchRelativeToParent, disconnectOnMatch } = {
+        parent: (document.body ?? document.documentElement),
+        subtree: true,
+        matchRelativeToParent: false,
+        disconnectOnMatch: true,
+        ...options
+    };
 
     // check if element is already in the DOM
     const element = document.querySelector(selector);
