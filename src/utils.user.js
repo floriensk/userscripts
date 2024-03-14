@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Utils
-// @version   1.7
+// @version   1.8
 // @updateURL https://raw.githubusercontent.com/floriensk/userscripts/main/src/utils.user.js
 // ==/UserScript==
 
@@ -92,11 +92,11 @@ async function waitForElementInDom(
     options = { parent: undefined, subtree: true, matchRelativeToParent: false, disconnectOnMatch: true }
 ) {
     const { parent, subtree, matchRelativeToParent, disconnectOnMatch } = {
-        parent: (document.body ?? document.documentElement),
         subtree: true,
         matchRelativeToParent: false,
         disconnectOnMatch: true,
-        ...options
+        ...options,
+        parent: options?.parent ?? (document.body ?? document.documentElement),
     };
 
     // check if element is already in the DOM
