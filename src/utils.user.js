@@ -1,6 +1,6 @@
 // ==UserScript==
 // @name      Utils
-// @version   1.6
+// @version   1.7
 // @updateURL https://raw.githubusercontent.com/floriensk/userscripts/main/src/utils.user.js
 // ==/UserScript==
 
@@ -106,7 +106,10 @@ async function waitForElementInDom(
 
     // using MutationObserver instead of DOMNodeInserted because the latter is deprecated
     return new Promise(resolve => {
-        const observer = new MutationObserver((_, observer) => {
+        const observer = new MutationObserver((mutationsList, observer) => {
+            if (!mutationsList.some(m => m.type === "childList" && m.addedNodes.length > 0))
+                return;
+            
             const element = (matchRelativeToParent ? parent : document).querySelector(selector);
             if (element != null) {
                 if (disconnectOnMatch)
